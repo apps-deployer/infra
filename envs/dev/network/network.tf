@@ -1,9 +1,11 @@
 resource "yandex_vpc_network" "main" {
-  name = "${local.prefix}-vpc"
+  name        = "${local.prefix}-vpc"
+  description = "Основная сеть проекта"
 }
 
 resource "yandex_vpc_subnet" "main" {
   name           = "${local.prefix}-subnet-a"
+  description    = "Основная подсеть в зоне ru-central1-a"
   v4_cidr_blocks = ["10.1.0.0/16"]
   zone           = var.zone
   network_id     = yandex_vpc_network.main.id
