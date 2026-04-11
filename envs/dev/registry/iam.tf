@@ -3,10 +3,10 @@ resource "yandex_iam_service_account" "registry_pusher" {
   description = "Сервисный аккаунт для публикации образов в Container Registry (используется build-воркером)"
 }
 
-resource "yandex_container_registry_iam_member" "pusher_user_apps" {
+resource "yandex_container_registry_iam_binding" "pusher_user_apps" {
   registry_id = yandex_container_registry.user_apps.id
   role        = "container-registry.images.pusher"
-  member      = "serviceAccount:${yandex_iam_service_account.registry_pusher.id}"
+  members      = ["serviceAccount:${yandex_iam_service_account.registry_pusher.id}"]
 }
 
 resource "yandex_iam_service_account_static_access_key" "registry_pusher" {
@@ -19,10 +19,10 @@ resource "yandex_iam_service_account" "ci_pusher" {
   description = "Сервисный аккаунт для публикации образов платформенных сервисов из CI/CD пайплайна"
 }
 
-resource "yandex_container_registry_iam_member" "ci_pusher_main" {
+resource "yandex_container_registry_iam_binding" "ci_pusher_main" {
   registry_id = yandex_container_registry.main.id
   role        = "container-registry.images.pusher"
-  member      = "serviceAccount:${yandex_iam_service_account.ci_pusher.id}"
+  members      = ["serviceAccount:${yandex_iam_service_account.ci_pusher.id}"]
 }
 
 resource "yandex_iam_service_account_static_access_key" "ci_pusher" {
@@ -35,10 +35,10 @@ resource "yandex_iam_service_account" "lifecycle_manager" {
   description = "Сервисный аккаунт для управления политиками жизненного цикла образов (CronJob)"
 }
 
-resource "yandex_container_registry_iam_member" "lifecycle_manager_editor" {
+resource "yandex_container_registry_iam_binding" "lifecycle_manager_editor" {
   registry_id = yandex_container_registry.user_apps.id
   role        = "container-registry.editor"
-  member      = "serviceAccount:${yandex_iam_service_account.lifecycle_manager.id}"
+  members      = ["serviceAccount:${yandex_iam_service_account.lifecycle_manager.id}"]
 }
 
 resource "yandex_iam_service_account_static_access_key" "lifecycle_manager" {
