@@ -1,0 +1,5 @@
+cloud_id    = "your_cloud_id"
+folder_id   = "your_folder_id"
+project     = "apps-deployer"
+env         = "dev"
+domain_zone = "example.com"
