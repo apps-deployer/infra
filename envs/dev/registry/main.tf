@@ -4,14 +4,16 @@ terraform {
       source = "yandex-cloud/yandex"
     }
   }
+
   required_version = ">= 0.13"
+
   backend "s3" {
     endpoints = {
       s3 = "https://storage.yandexcloud.net"
     }
-    bucket = "apps-deployer-dev-tfstate"
+    bucket = "apps-deployer-tfstate"
     region = "ru-central1"
-    key    = "env-dev/infra/k8s.tfstate"
+    key    = "${var.env}/registry/terraform.tfstate"
 
     skip_region_validation      = true
     skip_credentials_validation = true
@@ -21,5 +23,7 @@ terraform {
 }
 
 provider "yandex" {
-  zone = "ru-central1-a"
+  cloud_id  = var.cloud_id
+  folder_id = var.folder_id
+  zone      = var.zone
 }
