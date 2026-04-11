@@ -47,7 +47,7 @@ resource "yandex_vpc_security_group" "k8s_master" {
     protocol       = "TCP"
     description    = "Доступ к API-серверу Kubernetes (kubectl)"
     v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 6443
+    port           = 443
   }
 }
 
