@@ -2,7 +2,7 @@ data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "apps-deployer-tfstate"
-    key    = "${var.env}/network/terraform.tfstate"
+    key    = "dev/network/terraform.tfstate"
     region = "ru-central1"
 
     endpoints = {
