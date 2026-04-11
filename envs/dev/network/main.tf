@@ -13,7 +13,7 @@ terraform {
     }
     bucket = "apps-deployer-tfstate"
     region = "ru-central1"
-    key    = "${var.env}/network/terraform.tfstate"
+    key    = "dev/network/terraform.tfstate"
 
     skip_region_validation      = true
     skip_credentials_validation = true

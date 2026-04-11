@@ -7,5 +7,5 @@ output "subnet_id" {
 }
 
 output "v4_cidr_blocks" {
-  value = yandex_vpc_subnet.v4_cidr_blocks
+  value = yandex_vpc_subnet.main.v4_cidr_blocks
 }
