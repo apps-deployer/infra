@@ -20,6 +20,11 @@ variable "env" {
   type = string
 }
 
+variable "domain_zone" {
+  type        = string
+  description = "DNS zone"
+}
+
 locals {
   prefix = "${var.project}-${var.env}"
 }

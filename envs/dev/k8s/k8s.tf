@@ -3,7 +3,6 @@ resource "yandex_kubernetes_cluster" "main" {
   description = "Основной кластер Kubernetes"
   network_id  = data.terraform_remote_state.network.outputs.network_id
   master {
-    version   = "1.30"
     public_ip = true
     master_location {
       zone      = var.zone
@@ -60,7 +59,6 @@ resource "yandex_kubernetes_node_group" "main" {
   cluster_id  = yandex_kubernetes_cluster.main.id
   name        = "${local.prefix}-k8s-ng"
   description = "Группа рабочих узлов"
-  version     = "1.30"
   instance_template {
     name        = "{instance.short_id}-{instance_group.id}"
     platform_id = "standard-v3"
@@ -87,9 +85,11 @@ resource "yandex_kubernetes_node_group" "main" {
       type = "containerd"
     }
   }
-
-  fixed_scale {
-    size = 2
+  
+  scale_policy {
+    fixed_scale {
+      size = 2
+    }
   }
 
   deploy_policy {
