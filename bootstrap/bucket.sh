@@ -6,7 +6,7 @@ BUCKET_NAME="apps-deployer-tfstate"
 yc storage bucket create --name "$BUCKET_NAME"
 
 # Enable versioning — allows rolling back tfstate on accidental deletion or corruption
-yc storage bucket update --name "$BUCKET_NAME" --versioning-status enabled
+yc storage bucket update --name "$BUCKET_NAME" --versioning versioning-enabled
 
 # Create KMS key for server-side encryption of tfstate (state contains secrets in plaintext)
 KMS_KEY_ID=$(yc kms symmetric-key create \
@@ -16,5 +16,3 @@ KMS_KEY_ID=$(yc kms symmetric-key create \
 
 yc storage bucket update --name "$BUCKET_NAME" \
   --encryption "key-id=$KMS_KEY_ID"
-
-echo "Bucket $BUCKET_NAME created with versioning and SSE (KMS key: $KMS_KEY_ID)"
