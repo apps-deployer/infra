@@ -1,8 +1,8 @@
-data "terraform_remote_state" "k8s" {
+data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "apps-deployer-tfstate"
-    key    = "dev/k8s/terraform.tfstate"
+    key    = "dev/network/terraform.tfstate"
     region = "ru-central1"
 
     endpoints = {
