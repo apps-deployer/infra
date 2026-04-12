@@ -7,5 +7,5 @@ output "k8s_cluster_endpoint" {
 }
 
 output "ingress_external_ip" {
-  value = yandex_vpc_address.ingress.external_ipv4_address[0].address
+  value = data.terraform_remote_state.network.outputs.ingress_external_ip
 }

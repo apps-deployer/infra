@@ -10,3 +10,11 @@ resource "yandex_vpc_subnet" "main" {
   zone           = var.zone
   network_id     = yandex_vpc_network.main.id
 }
+
+resource "yandex_vpc_address" "ingress" {
+  name        = "${local.prefix}-ingress-ip"
+  description = "Статический внешний IP для Ingress-контроллера (Traefik)"
+  external_ipv4_address {
+    zone_id = var.zone
+  }
+}
