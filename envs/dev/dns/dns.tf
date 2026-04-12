@@ -9,7 +9,7 @@ resource "yandex_dns_recordset" "ingress_a" {
   name    = "@"
   type    = "A"
   ttl     = 300
-  data    = [data.terraform_remote_state.k8s.outputs.ingress_external_ip]
+  data    = [data.terraform_remote_state.network.outputs.ingress_external_ip]
 }
 
 resource "yandex_dns_recordset" "wildcard_a" {
@@ -17,5 +17,5 @@ resource "yandex_dns_recordset" "wildcard_a" {
   name    = "*"
   type    = "A"
   ttl     = 300
-  data    = [data.terraform_remote_state.k8s.outputs.ingress_external_ip]
+  data    = [data.terraform_remote_state.network.outputs.ingress_external_ip]
 }
