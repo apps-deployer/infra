@@ -27,9 +27,9 @@ Terraform-конфигурация облачной инфраструктуры
 bootstrap/          # однократная инициализация (SA, S3-бакет)
 envs/dev/
   network/          # VPC и подсеть
+  dns/              # DNS-зона и записи
   k8s/              # кластер Kubernetes
   registry/         # Container Registry
-  dns/              # DNS-зона и записи
   ci-cd/            # сервисные аккаунты для CI/CD
   dev.tfvars        # переменные окружения (не в git)
   dev.tfvars.example
@@ -65,12 +65,12 @@ source scripts/auth.sh   # или auth.fish для Fish shell
 ### 4. Применить модули по порядку
 
 ```bash
-# Зависимости: network → k8s → registry → dns → ci-cd
+# Зависимости: network → dns → k8s → registry → ci-cd
 
 cd envs/dev/network  && terraform init && terraform apply -var-file=../dev.tfvars
+cd envs/dev/dns      && terraform init && terraform apply -var-file=../dev.tfvars
 cd envs/dev/k8s      && terraform init && terraform apply -var-file=../dev.tfvars
 cd envs/dev/registry && terraform init && terraform apply -var-file=../dev.tfvars
-cd envs/dev/dns      && terraform init && terraform apply -var-file=../dev.tfvars
 cd envs/dev/ci-cd    && terraform init && terraform apply -var-file=../dev.tfvars
 ```
 
@@ -94,6 +94,7 @@ terraform output -raw ci_apps_sa_key   # → YC_SA_KEY в репозитория
 
 | SA | Роли | Используется в |
 |---|---|---|
+| `sa-terraform` | `admin` на каталог | Terraform (создаёт SA и назначает IAM-роли, поэтому нужен `admin`, а не `editor`) |
 | `k8s-sa` | `k8s.clusters.agent`, `vpc.publicAdmin`, `container-registry.images.puller` | Кластером Kubernetes |
 | `registry-pusher-sa` | `container-registry.images.pusher` на user-apps registry | Build-воркером deployments-service |
 | `lifecycle-manager-sa` | `container-registry.editor` на user-apps registry | CronJob очистки образов |
