@@ -1,10 +1,3 @@
-resource "yandex_vpc_address" "ingress" {
-  name = "${local.prefix}-ingress-ip"
-  external_ipv4_address {
-    zone_id = var.zone
-  }
-}
-
 resource "yandex_vpc_security_group" "k8s_common" {
   name        = "${local.prefix}-k8s-common-sg"
   description = "Общие правила для мастера и рабочих узлов: внутрикластерное взаимодействие и исходящий трафик"
