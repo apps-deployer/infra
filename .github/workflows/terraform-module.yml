@@ -63,11 +63,11 @@ jobs:
           if [[ "${{ inputs.module }}" == "all" ]]; then
             if [[ "${{ inputs.action }}" == "destroy" ]]; then
               # Обратный порядок при удалении
-              for mod in ci-cd dns registry k8s network; do
+              for mod in ci-cd registry k8s dns network; do
                 run_module "$mod"
               done
             else
-              for mod in network k8s registry dns ci-cd; do
+              for mod in network dns k8s registry ci-cd; do
                 run_module "$mod"
               done
             fi
