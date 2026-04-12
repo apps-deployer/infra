@@ -1,0 +1,76 @@
+name: Terraform Module
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: Модуль
+        required: true
+        type: choice
+        options:
+          - all
+          - network
+          - k8s
+          - registry
+          - dns
+          - ci-cd
+      action:
+        description: Действие
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_cloud_id: ${{ secrets.YC_CLOUD_ID }}
+  TF_VAR_folder_id: ${{ secrets.YC_FOLDER_ID }}
+  TF_VAR_env: dev
+  TF_VAR_project: apps-deployer
+  TF_VAR_domain_zone: ${{ secrets.DOMAIN_ZONE }}
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Write YC SA key
+        run: echo '${{ secrets.YC_SA_KEY }}' > key.json
+
+      - name: Run terraform
+        run: |
+          set -euo pipefail
+
+          run_module() {
+            local mod="$1"
+            echo "=== ${{ inputs.action }} $mod ==="
+            cd "$GITHUB_WORKSPACE/envs/dev/$mod"
+            terraform init -reconfigure
+            if [[ "${{ inputs.action }}" == "destroy" ]]; then
+              terraform destroy -auto-approve
+            else
+              terraform apply -auto-approve
+            fi
+            cd "$GITHUB_WORKSPACE"
+          }
+
+          if [[ "${{ inputs.module }}" == "all" ]]; then
+            if [[ "${{ inputs.action }}" == "destroy" ]]; then
+              # Обратный порядок при удалении
+              for mod in ci-cd dns registry k8s network; do
+                run_module "$mod"
+              done
+            else
+              for mod in network k8s registry dns ci-cd; do
+                run_module "$mod"
+              done
+            fi
+          else
+            run_module "${{ inputs.module }}"
+          fi
