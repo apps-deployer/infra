@@ -33,6 +33,12 @@ jobs:
           terraform init
           terraform apply -auto-approve
 
+      - name: Apply dns
+        working-directory: envs/dev/dns
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
       - name: Apply k8s
         working-directory: envs/dev/k8s
         run: |
@@ -41,12 +47,6 @@ jobs:
 
       - name: Apply registry
         working-directory: envs/dev/registry
-        run: |
-          terraform init
-          terraform apply -auto-approve
-
-      - name: Apply dns
-        working-directory: envs/dev/dns
         run: |
           terraform init
           terraform apply -auto-approve

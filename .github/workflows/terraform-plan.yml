@@ -32,6 +32,12 @@ jobs:
           terraform init
           terraform plan
 
+      - name: Plan dns
+        working-directory: envs/dev/dns
+        run: |
+          terraform init
+          terraform plan
+
       - name: Plan k8s
         working-directory: envs/dev/k8s
         run: |
@@ -40,12 +46,6 @@ jobs:
 
       - name: Plan registry
         working-directory: envs/dev/registry
-        run: |
-          terraform init
-          terraform plan
-
-      - name: Plan dns
-        working-directory: envs/dev/dns
         run: |
           terraform init
           terraform plan
