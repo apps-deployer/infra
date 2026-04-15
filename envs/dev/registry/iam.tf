@@ -9,9 +9,9 @@ resource "yandex_container_registry_iam_binding" "pusher_user_apps" {
   members      = ["serviceAccount:${yandex_iam_service_account.registry_pusher.id}"]
 }
 
-resource "yandex_iam_service_account_static_access_key" "registry_pusher" {
+resource "yandex_iam_service_account_key" "registry_pusher" {
   service_account_id = yandex_iam_service_account.registry_pusher.id
-  description        = "Статический ключ для docker login в Yandex Container Registry"
+  description        = "JSON-ключ для docker login в Yandex Container Registry (json_key auth)"
 }
 
 resource "yandex_iam_service_account" "lifecycle_manager" {
